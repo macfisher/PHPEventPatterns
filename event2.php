@@ -95,6 +95,22 @@ class Dispatcher {
 	}
 }
 
+// practical usage of the dispatcher (example)
+$dispatcher = new Dispatcher();
+$dispatcher->addListener('exampleCallback', 'example');
+
+// trigger the event directly...
+$event = new Event('example', array('exampleParam1', 'exampleParam2'));
+$dispatcher->notify($event);
+
+// or make use of "bubbling"
+$event = new Event('example', array('exampleParam1', 'exampleParam2'));
+$dispatcher->notify($event);
+
+function exampleCallback($exampleParam1, $exampleParam2) {
+	echo $exampleParam1 . ', ' . $exampleParam2;
+}
+
 
 
 
