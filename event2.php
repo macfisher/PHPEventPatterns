@@ -58,6 +58,22 @@ class Dispatcher {
 		return $return;
 	}
 	
+	// adds an event to the class events property and returns it as a pointer
+	private function _build($node) {
+		$nodes = explode('/', $node);
+		$pointer =& $this->events;
+		
+		foreach($nodes as $node) {
+			if (!isset($pointer->$node)) {
+				$pointer->addChild($node);
+			}
+			
+			$pointer =& $pointer->$node;
+		}
+		
+		return array($pointer);
+	}
+	
 	public function notify(Event &$event) {}
 }
 
