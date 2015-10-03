@@ -10,7 +10,7 @@ class Event {
 	}
 	
 	public function __get($propery) {
-		if (isset($this->$property)) {
+		if(isset($this->$property)) {
 			return $this->$property;
 		}
 	}
@@ -27,8 +27,8 @@ class Dispatcher {
 	public function addListener($callback, $event) {
 		$return = false;
 		
-		if (is_callable($callback) === true) {
-			if (is_array($callback)) {
+		if(is_callable($callback) === true) {
+			if(is_array($callback)) {
 				$id = md5(get_class($callback[0]) . json_encode($callback));
 			} else {
 				$id = md5(json_encode($callback));
@@ -40,7 +40,7 @@ class Dispatcher {
 				$status = $match->xpath('./listener[@id=\'' . $id . '\']');
 				$status = ($status === false || count($status) === 0) ? false : true;
 				
-				if ($status === false) {
+				if($status === false) {
 					$listener = $match->addChild('listener');
 					$listener['id'] = $id;
 					
@@ -48,7 +48,7 @@ class Dispatcher {
 				}
 			}
 			
-			if (!isset($this->callback[$id])) {
+			if(!isset($this->callback[$id])) {
 				$this->callback[$id] =& $callback;
 			}
 			
@@ -64,7 +64,7 @@ class Dispatcher {
 		$pointer =& $this->events;
 		
 		foreach($nodes as $node) {
-			if (!isset($pointer->$node)) {
+			if(!isset($pointer->$node)) {
 				$pointer->addChild($node);
 			}
 			
@@ -74,8 +74,41 @@ class Dispatcher {
 		return array($pointer);
 	}
 	
-	public function notify(Event &$event) {}
+	public function notify(Event &$event) {
+		$return = false;
+		
+		if($this->events !== null) {
+			$matches =& $this->_getEvent($event->name);
+			$expression = '/events/' . $event->name . '[not(@id)]/listener[@id]/events/' . $event->name . '[not(@id)]/ancestor::*/listener[@id]';
+			$matches = $this->events->xpath($expression);
+			
+			if(is_array($matches)) {
+				foreach($matches as $match) {
+					call_user_func_array($this->callbacks[(string) $match['id']], $event->parameters);
+				}
+			}
+			
+			$return = true;
+		}
+		
+		return $return;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
