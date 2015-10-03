@@ -59,7 +59,7 @@ class Dispatcher {
 	}
 	
 	private function &_getEvent($node) {
-		$matches = $this->events->xpath('/events/' . $node . 'not(@id)]');
+		$matches = $this->events->xpath('/events/' . $node . '[not(@id)]');
 		
 		if($matches === false || count($matches) === 0) {
 			$matches = $this->_build($node);
@@ -114,8 +114,8 @@ $event = new Event('example', array('exampleParam1', 'exampleParam2'));
 $dispatcher->notify($event);
 
 // or make use of "bubbling"
-$event = new Event('example/subevent', array('exampleParam1', 'exampleParam2'));
-$dispatcher->notify($event);
+/*$event = new Event('example/subevent', array('exampleParam1', 'exampleParam2'));
+$dispatcher->notify($event);*/
 
 function exampleCallback($exampleParam1, $exampleParam2) {
 	echo $exampleParam1 . ', ' . $exampleParam2;
