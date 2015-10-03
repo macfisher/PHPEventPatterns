@@ -17,5 +17,13 @@ class Event {
 }
 
 class Dispatcher {
+	private $callbacks = array();
+	private $events = null;
 	
+	public function __construct() {
+		$this->events = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><events></events>');
+	}
+	
+	public function addListener($callback, $event) {}
+	public function notify(Event &$event) {}
 }
