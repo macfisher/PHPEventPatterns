@@ -81,8 +81,3 @@ $newspaper->breakOutNews('USA break down!');
 //=====Output=====
 // Allen is reading breakout news USA break down! (Newyork Times)
 // Jim is reading breakout news USA break down! (Newyork Times)
-
-
-
-
-
