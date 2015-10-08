@@ -1,0 +1,4 @@
+Instantiate PatternSubject -> patternGossiper
+	creates an object that has access to the following methods
+		- observers array
+		- attach: 
