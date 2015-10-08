@@ -1,4 +1,15 @@
 Instantiate PatternSubject -> patternGossiper
 	creates an object that has access to the following methods
 		- observers array
-		- attach: 
+		- attach: takes observer_in as arg
+			pushes observers to an array
+			
+		- detach: takes observer_in as arg
+			foreach, finds observer_in and unsets it
+			
+		- notify: foreach on observers array
+		  	calls update func on each observer in array
+				update func is part of Observer class
+					writes to stdout getFavorites in Subject class
+						getFavorites = arg passed to updateFavorites, which
+						is a string passed to it, could be anything for stdout.
