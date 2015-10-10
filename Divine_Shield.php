@@ -1,24 +1,14 @@
 <?php
 
-abstract class AbstractObserver {
-    abstract function update(AbstractSubject $subject_in);
-}
-
-abstract class AbstractSubject {
-    abstract function attach(AbstractObserver $observer_in);
-    abstract function detach(AbstractObserver $observer_in);
-    abstract function notify();
-}
-
 function writeIn($line_in) {
     echo $line_in."\n";
 }
 
-class PatternObserver extends AbstractObserver {
+class PatternObserver {
     public function __construct() {}
 	
 	// this is the event that gets triggered
-    public function update(AbstractSubject $subject) {
+    public function update($subject) {
         writeIn('*IN PATTERN OBSERVER - NEW PATTERN GOSSIP ALERT*');
         
         // get event status
@@ -27,17 +17,17 @@ class PatternObserver extends AbstractObserver {
     }
 }
 
-class PatternSubject extends AbstractSubject {
+class PatternSubject {
     private $favoritePatterns = NULL;
     private $observers = array();
 
-    function __construct() {}
+    public function __construct() {}
 
-    function attach(AbstractObserver $observer_in) {
+    public function attach($observer_in) {
         $this->observers[] = $observer_in;
     }
 
-    function detach(AbstractObserver $observer_in) {
+    public function detach($observer_in) {
         foreach($this->observers as $okey => $oval) {
             if($oval == $observer_in) {
                 unset($this->observers[$okey]);
@@ -46,22 +36,30 @@ class PatternSubject extends AbstractSubject {
     }
 	
 	// this is the trigger that fires the event
-    function notify() {
+    public function notify() {
         foreach($this->observers as $obs) {
             $obs->update($this);
         }
     }
 	
 	// this is the hand that pulls the trigger
-    function updateFavorites($newFavorites) {
+    public function updateFavorites($newFavorites) {
         $this->favorites = $newFavorites;
         $this->notify();
     }
 	
 	// this is the bullet, ie DATA that gets sent to the event
-    function getFavorites() {
+    public function getFavorites() {
         return $this->favorites;
     }
+}
+
+class Priest extends PatternSubject {
+	public function __construct() {}
+	
+	public $stats = array(
+		'hp' => 10
+	);
 }
 
 writeIn('BEGIN TESTING OBSERVER PATTERN');
@@ -72,7 +70,7 @@ writeIn('');
  * and an interface class to receive user input
  */ 
 
-$priest = new PatternSubject();
+$priest = new Priest();
 $divineShield = new PatternObserver();
 $priest->attach($divineShield);
 $priest->updateFavorites('This will trigger Divine Shield.');
@@ -81,3 +79,5 @@ $priest->detach($divineShield);
 $priest->updateFavorites('This will try to trigger Divine Shield, but is now detached from the event.');
 
 writeIn('END TESTING OBSERVER PATTERN');
+writeIn('');
+writeIn("Priest HP: ".$priest->stats['hp']);
