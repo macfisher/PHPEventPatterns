@@ -16,9 +16,12 @@ function writeIn($line_in) {
 
 class PatternObserver extends AbstractObserver {
     public function __construct() {}
-
+	
+	// this is the event that gets triggered
     public function update(AbstractSubject $subject) {
         writeIn('*IN PATTERN OBSERVER - NEW PATTERN GOSSIP ALERT*');
+        
+        // get event status
         writeIn(' new favorite patterns: '.$subject->getFavorites());
         writeIn('*IN PATTERN OBSERVER - PATTERN GOSSIP ALERT OVER*');
     }
@@ -31,30 +34,31 @@ class PatternSubject extends AbstractSubject {
     function __construct() {}
 
     function attach(AbstractObserver $observer_in) {
-        // could also use array_push($this->observers, $observer_in);
         $this->observers[] = $observer_in;
     }
 
     function detach(AbstractObserver $observer_in) {
-        // $key = array_search($observer_in, $this->observers);
         foreach($this->observers as $okey => $oval) {
             if($oval == $observer_in) {
                 unset($this->observers[$okey]);
             }
         }
     }
-
+	
+	// this is the trigger that fires the event
     function notify() {
         foreach($this->observers as $obs) {
             $obs->update($this);
         }
     }
-
+	
+	// this is the hand that pulls the trigger
     function updateFavorites($newFavorites) {
         $this->favorites = $newFavorites;
         $this->notify();
     }
-
+	
+	// this is the bullet, ie DATA that gets sent to the event
     function getFavorites() {
         return $this->favorites;
     }
@@ -63,12 +67,17 @@ class PatternSubject extends AbstractSubject {
 writeIn('BEGIN TESTING OBSERVER PATTERN');
 writeIn('');
 
-$patternGossiper = new PatternSubject();
-$patternGossipFan = new PatternObserver();
-$patternGossiper->attach($patternGossipFan);
-$patternGossiper->updateFavorites('abstract factory, decorator, visitor');
-$patternGossiper->updateFavorites('abstract factory, decorator, visitor');
-$patternGossiper->detach($patternGossipFan);
-$patternGossiper->updateFavorites('abstract factory, observer, paisley');
+/**
+ * will need a $player obj. to deal damage and echo state
+ * and an interface class to receive user input
+ */ 
+
+$priest = new PatternSubject();
+$divineShield = new PatternObserver();
+$priest->attach($divineShield);
+$priest->updateFavorites('This will trigger Divine Shield.');
+$priest->updateFavorites('This will trigger Divine Shield, but will have no charges left.');
+$priest->detach($divineShield);
+$priest->updateFavorites('This will try to trigger Divine Shield, but is now detached from the event.');
 
 writeIn('END TESTING OBSERVER PATTERN');
