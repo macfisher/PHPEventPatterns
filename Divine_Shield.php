@@ -9,11 +9,11 @@ class PatternObserver {
 	
 	// this is the event that gets triggered
     public function update($subject) {
-        writeIn('*IN PATTERN OBSERVER - NEW PATTERN GOSSIP ALERT*');
+        writeIn("Checking \$priest->stats['hp'] as STATE: HP = ".$subject->getState());
         
-        // get event status
-        writeIn(' new favorite patterns: '.$subject->getFavorites());
-        writeIn('*IN PATTERN OBSERVER - PATTERN GOSSIP ALERT OVER*');
+        if($subject->getState() < 10) {
+        	writeIn("Priest has been WOUNDED!");
+        }
     }
 }
 
@@ -43,23 +43,21 @@ class PatternSubject {
     }
 	
 	// this is the hand that pulls the trigger
-    public function updateFavorites($newFavorites) {
-        $this->favorites = $newFavorites;
+    public function updateState($newState) {
+        $this->state = $newState;
         $this->notify();
     }
 	
 	// this is the bullet, ie DATA that gets sent to the event
-    public function getFavorites() {
-        return $this->favorites;
+    public function getState() {
+        return $this->state;
     }
 }
 
 class Priest extends PatternSubject {
 	public function __construct() {}
 	
-	public $stats = array(
-		'hp' => 10
-	);
+	public $stats = array('hp' => 9);
 }
 
 writeIn('BEGIN TESTING OBSERVER PATTERN');
@@ -73,11 +71,5 @@ writeIn('');
 $priest = new Priest();
 $divineShield = new PatternObserver();
 $priest->attach($divineShield);
-$priest->updateFavorites('This will trigger Divine Shield.');
-$priest->updateFavorites('This will trigger Divine Shield, but will have no charges left.');
+$priest->updateState($priest->stats['hp']);
 $priest->detach($divineShield);
-$priest->updateFavorites('This will try to trigger Divine Shield, but is now detached from the event.');
-
-writeIn('END TESTING OBSERVER PATTERN');
-writeIn('');
-writeIn("Priest HP: ".$priest->stats['hp']);
