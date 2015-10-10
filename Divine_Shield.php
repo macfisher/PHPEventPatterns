@@ -60,16 +60,14 @@ class Priest extends PatternSubject {
 	public $stats = array('hp' => 9);
 }
 
-writeIn('BEGIN TESTING OBSERVER PATTERN');
-writeIn('');
-
 /**
  * will need a $player obj. to deal damage and echo state
  * and an interface class to receive user input
  */ 
-
+writeIn('');
 $priest = new Priest();
 $divineShield = new PatternObserver();
 $priest->attach($divineShield);
 $priest->updateState($priest->stats['hp']);
 $priest->detach($divineShield);
+writeIn('');
