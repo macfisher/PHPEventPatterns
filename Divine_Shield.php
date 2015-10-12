@@ -57,7 +57,10 @@ class PatternSubject {
 class Priest extends PatternSubject {
 	public function __construct() {}
 	
-	public $stats = array('hp' => 9);
+	public $state = array(
+		'hp' => 9,
+		'combat' => false
+	);
 }
 
 /**
@@ -68,6 +71,8 @@ writeIn('');
 $priest = new Priest();
 $divineShield = new PatternObserver();
 $priest->attach($divineShield);
-$priest->updateState($priest->stats['hp']);
+
+// need a combat class that will update the combat state of a subject obj.
+$priest->updateState($priest->stats['state']);
 $priest->detach($divineShield);
 writeIn('');
