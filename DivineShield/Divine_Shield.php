@@ -56,12 +56,31 @@ class PatternSubject {
 
 }
 
-class userInput {
+class UserPrompt {
 
     public function __construct() {
+        $this->printOptions();
+        $input = $this->getInput();
+        $this->handleInput($input);
         
     }
-
+    
+    public function printOptions() {
+        writeIn('These are user options: ');
+        writeIn('1. attack Priest.');
+        writeIn('');
+    }
+    
+    public function getInput() {
+        $getInput = readline("Command: ");
+        $input = readline_add_history($getInput);
+    }
+    
+    public function handleInput($input) {
+        var_dump($input);
+        writeIn('');
+        writeIn($input);
+    }
 }
 
 class Combat {
@@ -95,24 +114,19 @@ class Priest extends PatternSubject {
 
     public $state = array(
         'hp' => 10,
-        'combat' => 'attacking'
+        'combat' => 'neutral'
     );
 
 }
 
-/**
- * will need a $player obj. to deal damage and echo state
- * and an interface class to receive user input
- */
-writeIn('');
-$priest = new Priest();
-$combat = new Combat();
-$priest->attach($combat);
 
-// need a combat class that will update the combat state of a subject obj.
-$priest->updateState($priest->state['combat']);
-$priest->detach($combat);
 writeIn('');
+
+$userPrompt = new UserPrompt();
+
+writeIn('');
+
+
 
 /**
  * Notes: Order of operations:
