@@ -62,25 +62,24 @@ class UserPrompt {
         $this->printOptions();
         $input = $this->getInput();
         $this->handleInput($input);
-        
     }
-    
+
     public function printOptions() {
         writeIn('These are user options: ');
         writeIn('1. attack Priest.');
         writeIn('');
     }
-    
+
     public function getInput() {
         $getInput = readline("Command: ");
-        $input = readline_add_history($getInput);
+        $input = $getInput;
+        return $input;
     }
-    
+
     public function handleInput($input) {
         var_dump($input);
-        writeIn('');
-        writeIn($input);
     }
+
 }
 
 class Combat {
@@ -118,7 +117,6 @@ class Priest extends PatternSubject {
     );
 
 }
-
 
 writeIn('');
 
