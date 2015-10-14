@@ -38,8 +38,10 @@ class PatternSubject {
 
     // this is the trigger that fires the event
     public function notify() {
+        writeIn('TESTING NOTIFY and UPDATE');
         foreach ($this->observers as $obs) {
             $obs->update($this);
+            var_dump($this);
         }
     }
 
@@ -83,11 +85,13 @@ class UserPrompt {
                 $priest = new Priest();
                 $combat = new Combat($priest);
                 
-                //$priest->state['combat'] = 'attacking';
+                var_dump($priest->state['combat']);
+                $priest->state['combat'] = 'attacking';
                 
                 $priest->attach($combat);
                 var_dump($priest->state['combat']);
                 $priest->updateState($priest->state);
+                var_dump($priest->state['combat']);
                 break;
             
             default:
