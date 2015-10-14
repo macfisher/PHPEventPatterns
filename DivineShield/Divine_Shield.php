@@ -77,11 +77,28 @@ class UserPrompt {
     }
 
     public function handleInput($input) {
-        var_dump($input);
+        switch($input) {
+            case '1':
+                writeIn('User signals to attack Priest.');
+                $priest = new Priest();
+                $combat = new Combat($priest);
+                
+                //$priest->state['combat'] = 'attacking';
+                
+                $priest->attach($combat);
+                var_dump($priest->state['combat']);
+                $priest->updateState($priest->state);
+                break;
+            
+            default:
+                writeIn('Unknown command.');
+                break;
+        }
     }
 
 }
 
+// Combat Observer
 class Combat {
 
     public function __construct() {
@@ -89,7 +106,7 @@ class Combat {
     }
 
     public function update($subject) {
-        switch ($subject->getState()) {
+        switch($subject->getState()) {
             case 'attacking':
                 writeIn('Subject is attacking.');
                 break;
