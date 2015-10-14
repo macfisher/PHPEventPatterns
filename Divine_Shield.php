@@ -4,18 +4,28 @@ function writeIn($line_in) {
     echo $line_in."\n";
 }
 
+/*
 class PatternObserver {
     public function __construct() {}
 	
-	// this is the event that gets triggered
+    // this is the event that gets triggered
+    public function update($subject) {
+        var_dump($subject->getState());
+    }
+}
+*/
+ 
+class Combat {
+    public function __construct() {}
+	
     public function update($subject) {
         switch($subject->getState()) {
-            case $subject->getState() === false:
-                writeIn('Subject is out of combat.');
+            case 'attacking':
+                writeIn('Subject is attacking.');
                 break;
             
-            case $subject->getState() === true:
-                writeIn('Subject is in combat.');
+            case 'defending':
+                writeIn('Subject is defending.');
                 break;
             
             default:
@@ -66,7 +76,7 @@ class Priest extends PatternSubject {
 	
 	public $state = array(
 		'hp' => 10,
-		'combat' => neutral
+		'combat' => 'attacking'
 	);
 }
 
@@ -76,10 +86,17 @@ class Priest extends PatternSubject {
  */ 
 writeIn('');
 $priest = new Priest();
-$divineShield = new PatternObserver();
-$priest->attach($divineShield);
+$combat = new Combat();
+$priest->attach($combat);
 
 // need a combat class that will update the combat state of a subject obj.
 $priest->updateState($priest->state['combat']);
-$priest->detach($divineShield);
+$priest->detach($combat);
 writeIn('');
+
+/**
+ * Notes: Order of operations:
+ * 1. prompt user to attack Priest
+ * 2. divine shield blocks first attack
+ * 3. subsequent attacks do defined dmg.
+ */
