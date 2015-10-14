@@ -9,10 +9,17 @@ class PatternObserver {
 	
 	// this is the event that gets triggered
     public function update($subject) {
-        writeIn("Checking \$priest->stats['hp'] as STATE: HP = ".$subject->getState());
-        
-        if($subject->getState() < 10) {
-        	writeIn("Priest has been WOUNDED!");
+        switch($subject->getState()) {
+            case $subject->getState() === false:
+                writeIn('Subject is out of combat.');
+                break;
+            
+            case $subject->getState() === true:
+                writeIn('Subject is in combat.');
+                break;
+            
+            default:
+                writeIn("Combat state is unknown.");
         }
     }
 }
@@ -58,8 +65,8 @@ class Priest extends PatternSubject {
 	public function __construct() {}
 	
 	public $state = array(
-		'hp' => 9,
-		'combat' => false
+		'hp' => 10,
+		'combat' => neutral
 	);
 }
 
@@ -73,6 +80,6 @@ $divineShield = new PatternObserver();
 $priest->attach($divineShield);
 
 // need a combat class that will update the combat state of a subject obj.
-$priest->updateState($priest->stats['state']);
+$priest->updateState($priest->state['combat']);
 $priest->detach($divineShield);
 writeIn('');
