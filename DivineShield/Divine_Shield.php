@@ -61,9 +61,7 @@ class PatternSubject {
 class UserPrompt {
 
     public function __construct() {
-        $this->printOptions();
-        $input = $this->getInput();
-        $this->handleInput($input);
+        
     }
 
     public function printOptions() {
@@ -71,27 +69,45 @@ class UserPrompt {
         writeIn('1. attack Priest.');
         writeIn('');
     }
-
-    public function getInput() {
-        $getInput = readline("Command: ");
-        $input = $getInput;
-        return $input;
+    
+    public function prompt() {
+        $prompt = readline("Command: ");
+        $this->handlePrompt($prompt);
     }
 
-    public function handleInput($input) {
-        switch($input) {
+    public function handlePrompt($prompt) {
+        switch($prompt) {
             case '1':
                 writeIn('User signals to attack Priest.');
-                $priest = new Priest();
-                $combat = new Combat($priest);
+                $this->priest = new Priest();
+                $this->combat = new Combat();
                 
-                var_dump($priest->state['combat']);
-                $priest->state['combat'] = 'attacking';
+                // ** DUMP1 **
+                $dump1 = $this->priest->state['combat'];
+                writeIn('DUMP1: ');
+                var_dump($dump1);
+                writeIn('');
                 
-                $priest->attach($combat);
-                var_dump($priest->state['combat']);
-                $priest->updateState($priest->state);
-                var_dump($priest->state['combat']);
+                $this->priest->state['combat'] = 'attacking';
+                
+                $this->priest->attach($this->combat);
+                
+                // ** DUMP 2 ** THIS GETS DUMPED BEFORE COMBAT STATE UNKNOWN MSG
+                $dump2 = $this->priest->state['combat'];
+                writeIn('DUMP2: ');
+                var_dump($dump2);
+                $this->priest->state['hp'] = 444;
+                var_dump($this->priest);
+                writeIn('');
+                
+                $this->priest->updateState($this->priest->state);
+                
+                // ** DUMP 3 **
+                $dump3 = $this->priest->state['combat'];
+                writeIn('DUMP3: ');
+                var_dump($dump3);
+                writeIn('');
+                
                 break;
             
             default:
@@ -142,6 +158,8 @@ class Priest extends PatternSubject {
 writeIn('');
 
 $userPrompt = new UserPrompt();
+$userPrompt->printOptions();
+$userPrompt->prompt();
 
 writeIn('');
 
