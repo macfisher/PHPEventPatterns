@@ -105,7 +105,7 @@ class Combat {
         writeIn('TESTING SUBJECT');
         var_dump($subject);
         
-        switch($subject->state['combat']) {
+        switch($subject->state['combat']) { // hack, should use getState()
             case 'attacking':
                 writeIn('Subject is attacking.');
                 break;
