@@ -17,7 +17,7 @@ function writeIn($line_in) {
 
 class PatternSubject {
 
-    private $favoritePatterns = NULL;
+    //private $favoritePatterns = NULL;
     private $observers = array();
 
     public function __construct() {
@@ -38,10 +38,8 @@ class PatternSubject {
 
     // this is the trigger that fires the event
     public function notify() {
-        writeIn('TESTING NOTIFY and UPDATE');
         foreach ($this->observers as $obs) {
             $obs->update($this);
-            var_dump($this);
         }
     }
 
@@ -82,32 +80,10 @@ class UserPrompt {
                 $this->priest = new Priest();
                 $this->combat = new Combat();
                 
-                // ** DUMP1 **
-                $dump1 = $this->priest->state['combat'];
-                writeIn('DUMP1: ');
-                var_dump($dump1);
-                writeIn('');
-                
                 $this->priest->state['combat'] = 'attacking';
                 
                 $this->priest->attach($this->combat);
-                
-                // ** DUMP 2 ** THIS GETS DUMPED BEFORE COMBAT STATE UNKNOWN MSG
-                $dump2 = $this->priest->state['combat'];
-                writeIn('DUMP2: ');
-                var_dump($dump2);
-                $this->priest->state['hp'] = 444;
-                var_dump($this->priest);
-                writeIn('');
-                
                 $this->priest->updateState($this->priest->state);
-                
-                // ** DUMP 3 **
-                $dump3 = $this->priest->state['combat'];
-                writeIn('DUMP3: ');
-                var_dump($dump3);
-                writeIn('');
-                
                 break;
             
             default:
@@ -126,7 +102,10 @@ class Combat {
     }
 
     public function update($subject) {
-        switch($subject->getState()) {
+        writeIn('TESTING SUBJECT');
+        var_dump($subject);
+        
+        switch($subject->state['combat']) {
             case 'attacking':
                 writeIn('Subject is attacking.');
                 break;
