@@ -1,5 +1,19 @@
 <?php
 
+/**
+ * Notes: Order of operations:
+ * 1. prompt user to attack Priest
+ * 2. divine shield blocks first attack
+ * 3. subsequent attacks do defined dmg.
+ */
+writeIn('');
+
+$userPrompt = new UserPrompt();
+$userPrompt->printOptions();
+$userPrompt->prompt();
+
+writeIn('');
+
 function writeIn($line_in) {
     echo $line_in . "\n";
 }
@@ -67,25 +81,25 @@ class UserPrompt {
         writeIn('1. attack Priest.');
         writeIn('');
     }
-    
+
     public function prompt() {
         $prompt = readline("Command: ");
         $this->handlePrompt($prompt);
     }
 
     public function handlePrompt($prompt) {
-        switch($prompt) {
+        switch ($prompt) {
             case '1':
                 writeIn('User signals to attack Priest.');
-                $this->priest = new Priest();
-                $this->combat = new Combat();
-                
-                $this->priest->state['combat'] = 'attacking';
-                
-                $this->priest->attach($this->combat);
-                $this->priest->updateState($this->priest->state);
+                $priest = new Priest();
+                $combat = new Combat();
+
+                $priest->state['combat'] = 'defending';
+
+                $priest->attach($combat);
+                $priest->updateState($priest->state);
                 break;
-            
+
             default:
                 writeIn('Unknown command.');
                 break;
@@ -104,8 +118,14 @@ class Combat {
     public function update($subject) {
         writeIn('TESTING SUBJECT');
         var_dump($subject);
-        
-        switch($subject->state['combat']) { // hack, should use getState()
+        writeIn('GET STATE: ');
+
+
+        $getCombatState = $subject->getState();
+        $combatState = $getCombatState['combat'];
+        var_dump($combatState);
+
+        switch ($combatState) {
             case 'attacking':
                 writeIn('Subject is attacking.');
                 break;
@@ -121,11 +141,7 @@ class Combat {
 
 }
 
-class Priest extends PatternSubject {
-
-    public function __construct() {
-        
-    }
+class Priest extends \PatternSubject {
 
     public $state = array(
         'hp' => 10,
@@ -133,20 +149,3 @@ class Priest extends PatternSubject {
     );
 
 }
-
-writeIn('');
-
-$userPrompt = new UserPrompt();
-$userPrompt->printOptions();
-$userPrompt->prompt();
-
-writeIn('');
-
-
-
-/**
- * Notes: Order of operations:
- * 1. prompt user to attack Priest
- * 2. divine shield blocks first attack
- * 3. subsequent attacks do defined dmg.
- */
