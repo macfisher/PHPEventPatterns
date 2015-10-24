@@ -98,6 +98,7 @@ class UserPrompt {
 
                 $this->priest->attach($this->combat);
                 $this->priest->updateState($this->priest->state);
+                
                 $this->prompt();
                 break;
 
@@ -114,7 +115,7 @@ class UserPrompt {
 class Combat {
 
     public function __construct() {
-        
+        $this->player = new Player(); // new player every time, doesn't work
     }
 
     public function update($subject) {
@@ -134,6 +135,13 @@ class Combat {
 
             case 'defending':
                 writeIn('Subject is defending.');
+                $targetHp =& $getCombatState['hp'];
+                $playerAtk = $this->player->stats['attack'];
+                
+                $targetHp -= $playerAtk;
+                
+                writeIn('Subject has taken damage!');
+                
                 break;
 
             default:
@@ -150,4 +158,11 @@ class Priest extends \PatternSubject {
         'combat' => 'neutral'
     );
 
+}
+
+class Player {
+    // only the attack dmg is needed right now
+    public $stats = array(
+        'attack' => 3
+    );
 }
