@@ -8,7 +8,7 @@
  */
 writeIn('');
 
-$userPrompt = new UserPrompt();
+$userPrompt = new UserPrompt;
 $userPrompt->printOptions();
 $userPrompt->prompt();
 
@@ -73,7 +73,8 @@ class PatternSubject {
 class UserPrompt {
 
     public function __construct() {
-        
+        $this->priest = new Priest();
+        $this->combat = new Combat();
     }
 
     public function printOptions() {
@@ -91,17 +92,18 @@ class UserPrompt {
         switch ($prompt) {
             case '1':
                 writeIn('User signals to attack Priest.');
-                $priest = new Priest();
-                $combat = new Combat();
+                
 
-                $priest->state['combat'] = 'defending';
+                $this->priest->state['combat'] = 'defending';
 
-                $priest->attach($combat);
-                $priest->updateState($priest->state);
+                $this->priest->attach($this->combat);
+                $this->priest->updateState($this->priest->state);
+                $this->prompt();
                 break;
 
             default:
                 writeIn('Unknown command.');
+                $this->prompt();
                 break;
         }
     }
